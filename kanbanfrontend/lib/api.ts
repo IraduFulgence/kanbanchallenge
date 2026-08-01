@@ -11,7 +11,7 @@ import type {
   PaginatedActivityLogs,
 } from "./types";
 
-const BASE_URL = process.env.NEXT_PUBLIC_API_URL ?? "http://127.0.0.1:8000/api";
+const BASE_URL = process.env.NEXT_PUBLIC_API_URL ?? "https://kanbanapi.bellatis.com/api";
 export type Role = "admin" | "project_manager" | "member";
 export class ApiError extends Error {
   status: number;
