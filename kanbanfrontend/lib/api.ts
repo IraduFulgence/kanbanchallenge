@@ -1,4 +1,6 @@
+// lib/api.ts
 import { clearToken, getToken } from "./auth";
+import axios from "axios";
 import type {
   Workspace,
   Board,
@@ -13,18 +15,67 @@ import type {
 
 const BASE_URL = process.env.NEXT_PUBLIC_API_URL ?? "http://127.0.0.1:8000/api";
 export type Role = "admin" | "project_manager" | "member";
+
 export class ApiError extends Error {
   status: number;
   errors?: Record<string, string[]>;
+  userMessage?: string; 
 
   constructor(status: number, message: string, errors?: Record<string, string[]>) {
     super(message);
     this.status = status;
     this.errors = errors;
+    
+    
+    this.userMessage = this.generateUserMessage(status, message, errors);
   }
 
+  
   fieldError(field: string): string | undefined {
     return this.errors?.[field]?.[0];
+  }
+
+  
+  private generateUserMessage(status: number, message: string, errors?: Record<string, string[]>): string {
+    // If there are validation errors, get the first one
+    if (errors && Object.keys(errors).length > 0) {
+      const firstField = Object.keys(errors)[0];
+      if (firstField && errors[firstField]?.length > 0) {
+        return errors[firstField][0];
+      }
+    }
+
+    // Map status codes to user-friendly messages
+    switch (status) {
+      case 400:
+        return message || 'Invalid request. Please check your input.';
+      case 401:
+        return 'Session expired. Please login again.';
+      case 403:
+        return 'You don\'t have permission to perform this action.';
+      case 404:
+        return 'The requested resource was not found.';
+      case 422:
+        return message || 'Validation failed. Please check your input.';
+      case 429:
+        return 'Too many requests. Please try again later.';
+      case 500:
+        return 'Server error. Please try again later.';
+      case 503:
+        return 'Service unavailable. Please try again later.';
+      case 0:
+        return 'Network error. Please check your connection.';
+      default:
+        return message || `Request failed (${status})`;
+    }
+  }
+
+  
+  getAllErrors(): string[] {
+    if (this.errors) {
+      return Object.values(this.errors).flat();
+    }
+    return [this.userMessage || this.message];
   }
 }
 
@@ -49,22 +100,53 @@ async function request<T>(path: string, opts: RequestOptions = {}): Promise<T> {
     throw new ApiError(0, "Network error — check your connection and that the API is reachable.");
   }
 
+  // Handle 401 Unauthorized
   if (res.status === 401) {
     clearToken();
-    if (typeof window !== "undefined" && !window.location.pathname.startsWith("/login")) {
-      window.location.assign("/login?expired=1");
+    if (typeof window !== "undefined" && !window.location.pathname.startsWith("/auth/login")) {
+      window.location.assign("/auth/login?expired=1");
     }
     throw new ApiError(401, "Session expired");
   }
 
+  
   if (res.status === 422) {
     const body = await res.json().catch(() => ({}));
-    throw new ApiError(422, body.message ?? "Validation failed", body.errors);
+    
+    // Extract errors from Laravel format
+    let errors: Record<string, string[]> = {};
+    if (body.errors) {
+      errors = body.errors;
+    } else if (body.message) {
+      // If only message exists, convert to errors format
+      errors = { general: [body.message] };
+    }
+    
+    throw new ApiError(422, body.message ?? "Validation failed", errors);
   }
 
+ 
   if (!res.ok) {
     const body = await res.json().catch(() => ({}));
-    throw new ApiError(res.status, body.message ?? `Request failed (${res.status})`);
+    
+    let errorMessage = body.message;
+    
+    // If message is an array 
+    if (Array.isArray(errorMessage)) {
+      errorMessage = errorMessage[0] || `Request failed (${res.status})`;
+    }
+    
+    // If no message, try error property
+    if (!errorMessage && body.error) {
+      errorMessage = body.error;
+    }
+    
+    // If still no message, use status text
+    if (!errorMessage) {
+      errorMessage = res.statusText || `Request failed (${res.status})`;
+    }
+    
+    throw new ApiError(res.status, errorMessage, body.errors);
   }
 
   if (res.status === 204) return undefined as T;
@@ -79,7 +161,10 @@ export const api = {
   put: <T>(path: string, body?: unknown) => request<T>(path, { method: "PUT", body }),
   delete: <T>(path: string) => request<T>(path, { method: "DELETE" }),
 };
-// user
+
+
+// USER Api
+
 
 export type User = {
   id: number;
@@ -89,7 +174,8 @@ export type User = {
   phone?: string | null;
 };
 
-// workspaces, boards, columns, tasks
+
+// WORKSPACES, BOARDS, COLUMNS, TASKS
 
 export function getMySpaces() {
   return api.get<{ data: Workspace[] }>("/working_space/myspace");
@@ -175,7 +261,6 @@ export function deleteBoard(boardId: number) {
   return api.delete<{ message: string }>(`/boards/${boardId}`);
 }
 
-// dashboard, analytics + activity logs
 
 export function getDashboardStats() {
   return api.get<{ data: DashboardStats }>("/dashboard/stats");
