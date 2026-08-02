@@ -18,7 +18,7 @@ export default function HomePage() {
     setLoadError("");
     getDashboardStats()
       .then((res) => setStats(res.data))
-      .catch((err) => setLoadError(err instanceof ApiError ? err.message : "Could not load dashboard stats"))
+      .catch((err) => setLoadError(err instanceof ApiError ? err.message : "Unable to load data"))
       .finally(() => setLoading(false));
   }
 
@@ -28,20 +28,16 @@ export default function HomePage() {
 
   return (
     <div>
-      <h1 className="mb-1 text-2xl font-semibold text-zinc-900 dark:text-white">
-        Welcome back{user ? `, ${user.name}` : ""}
-      </h1>
-      <p className="mb-6 text-sm text-zinc-500">Here&apos;s what&apos;s happening across your workspaces.</p>
-
+     
       {loading ? (
         <p className="text-sm text-zinc-500">Loading…</p>
       ) : !stats ? (
         <div className="space-y-3">
-          <p className="text-sm text-red-600">{loadError || "Could not load dashboard stats."}</p>
+          <p className="text-sm text-red-600">{loadError || "Unable to load data."}</p>
           <button
             type="button"
             onClick={load}
-            className="rounded-lg border border-zinc-300 px-4 py-2 text-sm font-medium text-zinc-700 hover:bg-zinc-100 dark:border-zinc-700 dark:text-zinc-200 dark:hover:bg-zinc-800"
+            className="rounded-lg border border-zinc-300 px-4 py-2 text-sm font-medium text-zinc-700 hover:bg-zinc-100 dark:border-zinc-700 dark:text-zinc-200 dark:hover:bg-zinc-800 dark:bg-gray-900"
           >
             Try again
           </button>

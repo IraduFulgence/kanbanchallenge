@@ -49,15 +49,10 @@ class WorkspaceController extends Controller
             ->withCount('boards')
             ->get();
 
-        if ($myworkingspace->isNotEmpty()) {
-            # code...
-            return response()->json([
-                'message'=>'Working space found',
-                'data'=>$myworkingspace
-            ],200);
-        }
-        return response()->json(['message'=>'No working space found'],201);
-
+        return response()->json([
+            'message'=>$myworkingspace->isNotEmpty() ? 'Working space found' : 'No working space found',
+            'data'=>$myworkingspace
+        ],200);
     }
 
  public function show(WorkSpace $workspace)

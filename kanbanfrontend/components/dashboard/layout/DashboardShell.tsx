@@ -9,8 +9,8 @@ export default function DashboardShell({ children }: { children: React.ReactNode
   const [open, setOpen] = useState(false);
 
   return (
-    <div className="min-h-screen bg-white">
-      <div className="hidden md:fixed md:inset-y-0 md:flex md:w-64 md:flex-col md:border-r md:border-zinc-200">
+    <div className="min-h-screen bg-white dark:bg-gray-900">
+      <div className="hidden md:fixed md:inset-y-0 md:flex md:w-64 md:flex-col md:border-r md:border-zinc-200 dark:md:border-gray-800 md:bg-white md:dark:bg-gray-900">
         <Sidebar />
       </div>
 

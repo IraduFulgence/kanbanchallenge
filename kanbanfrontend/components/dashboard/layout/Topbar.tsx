@@ -25,7 +25,7 @@ export default function Topbar({ onOpenMenu }: { onOpenMenu: () => void }) {
   const pathname = usePathname();
 
   return (
-    <header className="sticky top-0 z-30 flex items-center gap-3 border-b border-zinc-200 bg-white/80 px-4 py-3 backdrop-blur sm:gap-4 sm:px-6">
+    <header className="sticky top-0 z-30 flex items-center gap-3 border-b border-zinc-200 bg-white/80 px-4 py-3 backdrop-blur sm:gap-4 sm:px-6 dark:border-gray-800 dark:bg-gray-900/80">
       <button
         type="button"
         aria-label="Open menu"
@@ -35,7 +35,7 @@ export default function Topbar({ onOpenMenu }: { onOpenMenu: () => void }) {
         <MenuIcon className="h-6 w-6" />
       </button>
 
-      <div className="hidden shrink-0 md:block">
+      <div className="hidden shrink-0 md:block dark:bg-gray-900">
         <p className="text-xs font-medium uppercase tracking-wide text-zinc-400">Dashboard</p>
         <p className="text-sm font-semibold text-zinc-900">{sectionLabel(pathname)}</p>
       </div>

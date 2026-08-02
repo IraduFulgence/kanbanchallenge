@@ -22,7 +22,9 @@ Route::middleware('auth:api')->group(function(){
     Route::post('/logout',[AuthController::class,'logUserOut']);
 
     // admin/project_manager account management
+    Route::get('/users',[UserController::class,'index']);
     Route::post('/users',[UserController::class,'store']);
+    Route::patch('/users/{user}',[UserController::class,'update']);
     Route::delete('/users/{user}',[UserController::class,'destroy']);
 
     // admin-only activity feed

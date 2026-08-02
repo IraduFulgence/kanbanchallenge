@@ -11,6 +11,8 @@ import type {
   DashboardStats,
   WorkspaceAnalytics,
   PaginatedActivityLogs,
+  PaginatedUsers,
+  User as AppUser,
 } from "./types";
 
 const BASE_URL = process.env.NEXT_PUBLIC_API_URL ?? "http://127.0.0.1:8000/api";
@@ -128,25 +130,34 @@ async function request<T>(path: string, opts: RequestOptions = {}): Promise<T> {
  
   if (!res.ok) {
     const body = await res.json().catch(() => ({}));
-    
+
     let errorMessage = body.message;
-    
-    // If message is an array 
+    let errors: Record<string, string[]> | undefined = body.errors;
+
+    // Several Laravel endpoints in this API return validator()->errors() directly
+    // as `message` (with a 400 status) instead of the usual { message, errors } shape.
+    if (errorMessage && typeof errorMessage === "object" && !Array.isArray(errorMessage)) {
+      errors = errorMessage as Record<string, string[]>;
+      const firstField = Object.keys(errors)[0];
+      errorMessage = firstField ? errors[firstField][0] : undefined;
+    }
+
+    // If message is an array
     if (Array.isArray(errorMessage)) {
       errorMessage = errorMessage[0] || `Request failed (${res.status})`;
     }
-    
+
     // If no message, try error property
     if (!errorMessage && body.error) {
       errorMessage = body.error;
     }
-    
+
     // If still no message, use status text
     if (!errorMessage) {
       errorMessage = res.statusText || `Request failed (${res.status})`;
     }
-    
-    throw new ApiError(res.status, errorMessage, body.errors);
+
+    throw new ApiError(res.status, errorMessage, errors);
   }
 
   if (res.status === 204) return undefined as T;
@@ -177,8 +188,9 @@ export type User = {
 
 // WORKSPACES, BOARDS, COLUMNS, TASKS
 
-export function getMySpaces() {
-  return api.get<{ data: Workspace[] }>("/working_space/myspace");
+export async function getMySpaces() {
+  const res = await api.get<{ data: Workspace[] }>("/working_space/myspace");
+  return { ...res, data: res.data ?? [] };
 }
 
 export function getWorkspace(workspaceId: number) {
@@ -193,6 +205,47 @@ export function createWorkspace(workspaceName: string) {
 
 export function inviteMember(workspaceId: number, email: string) {
   return api.post<{ data: Workspace }>(`/working_space/${workspaceId}/invite`, { email });
+}
+
+// revokes a member's access to this workspace only — their account keeps existing
+export function removeWorkspaceMember(workspaceId: number, userId: number) {
+  return api.delete<{ data: Workspace }>(`/working_space/${workspaceId}/members/${userId}`);
+}
+
+// admin-only: permanently deletes the user's account across the whole system
+export function deleteUserAccount(userId: number) {
+  return api.delete<void>(`/users/${userId}`);
+}
+
+// admin/project_manager: registers a brand new account (e.g. to then invite them
+// into a workspace). A project_manager can only ever create plain members —
+// the backend silently downgrades the role for them.
+export function createUserAccount(user: {
+  name: string;
+  email: string;
+  phone: string;
+  password: string;
+  role?: Role;
+}) {
+  return api.post<{ data: AppUser }>("/users", user);
+}
+
+// admin/project_manager: every registered account, for the Employees directory
+export function getUsers(params?: { role?: Role; search?: string; page?: number }) {
+  const query = new URLSearchParams();
+  if (params?.role) query.set("role", params.role);
+  if (params?.search) query.set("search", params.search);
+  if (params?.page) query.set("page", String(params.page));
+  const qs = query.toString();
+  return api.get<{ data: PaginatedUsers }>(`/users${qs ? `?${qs}` : ""}`);
+}
+
+// admin-only: edits another account's profile/role
+export function updateUserAccount(
+  userId: number,
+  user: Partial<{ name: string; email: string; phone: string; role: Role }>
+) {
+  return api.patch<{ data: AppUser }>(`/users/${userId}`, user);
 }
 
 export function getBoards(workspaceId: number) {

@@ -12,6 +12,33 @@ use App\Models\ActivityLog;
 
 class UserController extends Controller
 {
+    // admin/project_manager browses everyone registered, to add them to a
+    // workspace or otherwise manage their account
+    public function index(Request $request)
+    {
+        if (auth()->user()->role === 'member') {
+            return response()->json(['message'=>'unauthorized access'],401);
+        }
+
+        $query = User::query()->latest();
+
+        if ($request->filled('role')) {
+            $query->where('role', $request->get('role'));
+        }
+        if ($request->filled('search')) {
+            $search = $request->get('search');
+            $query->where(function ($q) use ($search) {
+                $q->where('name', 'like', "%{$search}%")
+                  ->orWhere('email', 'like', "%{$search}%");
+            });
+        }
+
+        return response()->json([
+            'message'=>'users found',
+            'data'=>$query->paginate(20)
+        ],200);
+    }
+
     // admin/project_manager registers a new account on someone else's behalf
     public function store(Request $request)
     {
@@ -53,6 +80,32 @@ class UserController extends Controller
             'message'=>'user registered successfully',
             'data'=>$user
         ],201);
+    }
+
+    // admin edits another account's profile/role
+    public function update(Request $request, User $user)
+    {
+        if (auth()->user()->role !== 'admin') {
+            return response()->json(['message'=>'unauthorized access'],401);
+        }
+
+        $data = Validator::make($request->all(),[
+            'name' => 'sometimes|required|string|min:3|max:250',
+            'email' => 'sometimes|required|email|unique:users,email,'.$user->id,
+            'phone' => 'sometimes|required|numeric|min:10',
+            'role' => 'sometimes|required|in:admin,project_manager,member',
+        ]);
+        if ($data->fails()) {
+            return response()->json(['message'=>$data->errors()],400);
+        }
+
+        $user->update($data->validated());
+        ActivityLog::record('user.updated', $user, "{$user->name} updated by " . auth()->user()->name);
+
+        return response()->json([
+            'message'=>'user updated',
+            'data'=>$user
+        ],200);
     }
 
     // admin permanently deletes a user account

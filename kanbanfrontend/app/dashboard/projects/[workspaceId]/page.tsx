@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import Link from "next/link";
 import { useParams } from "next/navigation";
 import { useAuth } from "@/hooks/useAuth";
-import { getWorkspace, getWorkspaceAnalytics, createBoard, inviteMember, ApiError } from "@/lib/api";
+import { getWorkspace, getWorkspaceAnalytics, createBoard, ApiError } from "@/lib/api";
 import type { Workspace, WorkspaceAnalytics, TaskStatus, Priority } from "@/lib/types";
 import Modal from "@/components/dashboard/Modal";
 import { AuthInput } from "@/components/auth/AuthInput";
@@ -13,7 +13,6 @@ import BreakdownBar from "@/components/dashboard/BreakdownBar";
 import {
   PlusIcon,
   TrashIcon,
-  UsersIcon,
   FolderIcon,
   TasksIcon,
   ClockIcon,
@@ -45,7 +44,6 @@ export default function WorkspaceDetailPage() {
   const [workspace, setWorkspace] = useState<Workspace | null>(null);
   const [loading, setLoading] = useState(true);
   const [loadError, setLoadError] = useState("");
-  const [showInvite, setShowInvite] = useState(false);
   const [showCreateBoard, setShowCreateBoard] = useState(false);
   const [analytics, setAnalytics] = useState<WorkspaceAnalytics | null>(null);
   const [analyticsError, setAnalyticsError] = useState("");
@@ -90,7 +88,6 @@ export default function WorkspaceDetailPage() {
     );
   }
 
-  const isOwner = workspace.owner?.id === user?.id;
   const canManage = user?.role === "admin" || user?.role === "project_manager";
 
   return (
@@ -106,16 +103,6 @@ export default function WorkspaceDetailPage() {
           </p>
         </div>
         <div className="flex gap-2">
-          {isOwner && (
-            <button
-              type="button"
-              onClick={() => setShowInvite(true)}
-              className="flex items-center gap-2 rounded-lg border border-zinc-300 px-4 py-2 text-sm font-semibold text-zinc-700 hover:bg-zinc-100 dark:border-zinc-700 dark:text-zinc-200 dark:hover:bg-zinc-800"
-            >
-              <UsersIcon className="h-4 w-4" />
-              Invite member
-            </button>
-          )}
           {canManage && (
             <button
               type="button"
@@ -129,21 +116,30 @@ export default function WorkspaceDetailPage() {
         </div>
       </div>
 
-      <div className="mb-8 flex flex-wrap gap-2">
-        {workspace.owner && (
-          <span className="rounded-full bg-zinc-100 px-3 py-1 text-xs font-medium text-zinc-700 dark:bg-zinc-800 dark:text-zinc-200">
-            {workspace.owner.name} · Owner
-          </span>
-        )}
-        {workspace.members?.map((member) => (
-          <span
-            key={member.id}
-            className="rounded-full bg-zinc-100 px-3 py-1 text-xs font-medium text-zinc-700 dark:bg-zinc-800 dark:text-zinc-200"
-          >
-            {member.user.name}
-          </span>
-        ))}
-      </div>
+      <Link
+        href={`/dashboard/projects/${workspace.id}/members`}
+        className="mb-8 flex w-fit items-center gap-3 rounded-xl border border-zinc-200 px-4 py-3 hover:border-zinc-300 hover:bg-zinc-50 dark:border-zinc-700 dark:hover:border-zinc-600 dark:hover:bg-zinc-800/50"
+      >
+        <div className="flex -space-x-2">
+          {[
+            ...(workspace.owner ? [workspace.owner] : []),
+            ...(workspace.members?.map((m) => m.user) ?? []),
+          ]
+            .slice(0, 5)
+            .map((person) => (
+              <span
+                key={person.id}
+                className="flex h-8 w-8 items-center justify-center rounded-full border-2 border-white bg-zinc-900 text-xs font-medium text-white dark:border-gray-900 dark:bg-zinc-700"
+              >
+                {person.name.charAt(0).toUpperCase()}
+              </span>
+            ))}
+        </div>
+        <span className="text-sm font-medium text-zinc-700 dark:text-zinc-200">
+          {(workspace.members?.length ?? 0) + 1} member
+          {(workspace.members?.length ?? 0) + 1 === 1 ? "" : "s"} · Manage
+        </span>
+      </Link>
 
       {!workspace.boards || workspace.boards.length === 0 ? (
         <p className="text-sm text-zinc-500">No boards yet.</p>
@@ -224,17 +220,6 @@ export default function WorkspaceDetailPage() {
       )}
       {analyticsError && <p className="mt-4 text-sm text-red-600">{analyticsError}</p>}
 
-      {showInvite && (
-        <InviteMemberModal
-          workspaceId={workspace.id}
-          onClose={() => setShowInvite(false)}
-          onInvited={(updated) => {
-            setWorkspace(updated);
-            setShowInvite(false);
-          }}
-        />
-      )}
-
       {showCreateBoard && (
         <CreateBoardModal
           workspaceId={workspace.id}
@@ -248,56 +233,6 @@ export default function WorkspaceDetailPage() {
         />
       )}
     </div>
-  );
-}
-
-function InviteMemberModal({
-  workspaceId,
-  onClose,
-  onInvited,
-}: {
-  workspaceId: number;
-  onClose: () => void;
-  onInvited: (workspace: Workspace) => void;
-}) {
-  const [email, setEmail] = useState("");
-  const [error, setError] = useState("");
-  const [saving, setSaving] = useState(false);
-
-  async function handleSubmit(e: React.FormEvent) {
-    e.preventDefault();
-    setError("");
-    setSaving(true);
-    try {
-      const res = await inviteMember(workspaceId, email);
-      onInvited(res.data);
-    } catch (err) {
-      setError(err instanceof ApiError ? err.message : "Could not invite member");
-    } finally {
-      setSaving(false);
-    }
-  }
-
-  return (
-    <Modal title="Invite member" onClose={onClose}>
-      <form onSubmit={handleSubmit} className="space-y-4">
-        <AuthInput
-          label="Email address"
-          type="email"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-          autoFocus
-        />
-        {error && <p className="text-sm text-red-600">{error}</p>}
-        <button
-          type="submit"
-          disabled={saving}
-          className="w-full rounded-lg bg-green-900 px-4 py-2 text-sm font-semibold text-white hover:bg-green-800 disabled:opacity-50"
-        >
-          {saving ? "Inviting…" : "Send invite"}
-        </button>
-      </form>
-    </Modal>
   );
 }
 

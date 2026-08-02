@@ -7,6 +7,7 @@ export interface User {
   phone: string;
   user_avatar: string | null;
   role: Role;
+  created_at: string;
 }
 
 export interface Member {
@@ -106,6 +107,13 @@ export interface ActivityLogEntry {
 
 export interface PaginatedActivityLogs {
   data: ActivityLogEntry[];
+  current_page: number;
+  last_page: number;
+  total: number;
+}
+
+export interface PaginatedUsers {
+  data: User[];
   current_page: number;
   last_page: number;
   total: number;

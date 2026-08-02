@@ -34,7 +34,7 @@ export default function UserMenu() {
         onClick={() => setOpen((v) => !v)}
         className="flex items-center gap-2 rounded-lg py-1.5 pl-1.5 pr-2 hover:bg-zinc-100"
       >
-        <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-zinc-900 text-sm font-medium text-white">
+        <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-zinc-900 text-sm font-medium text-white dark:bg-gray-800 dark:text-white">
           {user.name.charAt(0).toUpperCase()}
         </div>
         <span className="hidden text-sm font-medium text-zinc-700 sm:block">{user.name}</span>
@@ -42,11 +42,11 @@ export default function UserMenu() {
       </button>
 
       {open && (
-        <div className="absolute right-0 top-full z-40 mt-2 w-64 overflow-hidden rounded-xl border border-zinc-200 bg-white shadow-lg">
+        <div className="absolute right-0 top-full z-40 mt-2 w-64 overflow-hidden rounded-xl border border-zinc-200 bg-white shadow-lg dark:border-gray-800 dark:bg-gray-900 dark:text-white">
           <div className="border-b border-zinc-100 px-4 py-3">
-            <p className="truncate text-sm font-medium text-zinc-900">{user.name}</p>
-            <p className="truncate text-xs text-zinc-500">{user.email}</p>
-            <span className="mt-2 inline-block rounded-full bg-zinc-100 px-2 py-0.5 text-[11px] font-medium text-zinc-600">
+            <p className="truncate text-sm font-medium text-zinc-900 dark:text-white">{user.name}</p>
+            <p className="truncate text-xs text-zinc-500 dark:text-gray-400">{user.email}</p>
+            <span className="mt-2 inline-block rounded-full bg-zinc-100 px-2 py-0.5 text-[11px] font-medium text-zinc-600 dark:bg-gray-800 dark:text-white">
               {ROLE_LABEL[user.role] ?? user.role}
             </span>
           </div>
