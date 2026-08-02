@@ -35,7 +35,7 @@ export default function RegisterComponent(){
     }
 
     return (
-      <AuthLayout>
+      
         <form onSubmit={handleSubmit} className="space-y-4 ">
           <AuthInput
             label="Full name"
@@ -89,6 +89,6 @@ export default function RegisterComponent(){
             </Link>
           </p>
         </form>
-      </AuthLayout>
+     
     );
   }
