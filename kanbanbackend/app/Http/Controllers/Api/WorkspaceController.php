@@ -9,9 +9,17 @@ use App\Models\WorkSpace;
 use App\Models\WorkspaceMembers;
 use App\Models\User;
 use App\Models\ActivityLog;
-
+use Illuminate\Support\Facades\Cache;
 class WorkspaceController extends Controller
 {
+
+protected CacheService $cache;
+
+    public function __construct(CacheService $cache)
+    {
+        $this->cache = $cache;
+    }
+
     //create workspace that belongs to user
     public function store(Request $request){
     // simple member can't create working space
