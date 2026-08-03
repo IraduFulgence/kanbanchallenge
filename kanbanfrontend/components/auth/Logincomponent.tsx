@@ -5,7 +5,6 @@ import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { useAuth } from "@/hooks/useAuth";
 import { AuthInput } from "./AuthInput";
-import AuthLayout from "@/app/auth/layout";
 export default function LoginComponent(){
     const router = useRouter();
     const { login } = useAuth();
@@ -31,7 +30,8 @@ export default function LoginComponent(){
   
     return (
       
-        <form onSubmit={handleSubmit} className="space-y-4 ">
+        <div className="w-full max-w-md rounded-lg bg-white p-8 shadow dark:bg-gray-800 w-h-full">
+          <form onSubmit={handleSubmit} className="space-y-4 ">
           <AuthInput
             label="Email"
             type="email"
@@ -59,6 +59,7 @@ export default function LoginComponent(){
             </Link>
           </p> */}
         </form>
+        </div>
 
       
     );

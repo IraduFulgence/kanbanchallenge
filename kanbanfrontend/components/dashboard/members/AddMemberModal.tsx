@@ -41,7 +41,7 @@ export default function AddMemberModal({
       await invite(email);
     } catch (err) {
       if (err instanceof ApiError && err.fieldError("email")) {
-        // no account exists for this email yet — offer to create one
+        // no account exists for this email yet, create one or ask the user to create one
         setNeedsAccount(true);
       } else {
         setError(err instanceof ApiError ? err.message : "Could not add member");
@@ -72,7 +72,7 @@ export default function AddMemberModal({
           <p className="text-sm text-zinc-500">
             No account exists for{" "}
             <span className="font-medium text-zinc-700 dark:text-zinc-300">{email}</span>. Create
-            one and add them to this workspace.
+            one and add them to this workspace?
           </p>
           <AuthInput label="Full name" value={name} onChange={(e) => setName(e.target.value)} autoFocus required />
           <AuthInput

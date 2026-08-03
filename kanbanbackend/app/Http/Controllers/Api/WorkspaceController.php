@@ -9,17 +9,9 @@ use App\Models\WorkSpace;
 use App\Models\WorkspaceMembers;
 use App\Models\User;
 use App\Models\ActivityLog;
-use Illuminate\Support\Facades\Cache;
+
 class WorkspaceController extends Controller
 {
-
-protected CacheService $cache;
-
-    public function __construct(CacheService $cache)
-    {
-        $this->cache = $cache;
-    }
-
     //create workspace that belongs to user
     public function store(Request $request){
     // simple member can't create working space
@@ -75,8 +67,7 @@ protected CacheService $cache;
        ],200);
     }
 
-    // owner, admin (any workspace) or project_manager (workspaces they belong to)
-    // can manage who's a member of a workspace
+    // check if the user can manage members of the workspace
     private function canManageMembers(WorkSpace $workspace): bool
     {
         $user = auth()->user();
@@ -92,7 +83,7 @@ protected CacheService $cache;
         return false;
     }
 
-    // admin/project_manager owning or belonging to the workspace can invite someone else in by email
+    // admin or project_manager owning or belonging to the workspace can invite someone else in by email
     public function invite(Request $request, WorkSpace $workspace)
     {
         if (!$this->canManageMembers($workspace)) {
@@ -128,9 +119,8 @@ protected CacheService $cache;
         ],200);
     }
 
-    // admin (any workspace) or project_manager (workspaces they belong to) revokes
-    // a member's access — this only removes them from the workspace, it does not
-    // touch the user's account
+    // owner, admin or project_manager can remove a member from the workspace
+
     public function removeMember(WorkSpace $workspace, User $user)
     {
         if (!$this->canManageMembers($workspace)) {

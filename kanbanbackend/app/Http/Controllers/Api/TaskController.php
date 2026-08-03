@@ -13,7 +13,7 @@ use App\Models\ActivityLog;
 class TaskController extends Controller
 {
     // every task assigned to the logged-in user, across every workspace/board
-    // they belong to — this is what "My Tasks" shows
+    
     public function myTasks(Request $request)
     {
         $query = Task::where('assigned_to', auth()->id())
@@ -122,6 +122,21 @@ class TaskController extends Controller
         }
 
         $position = $request->get('position');
+
+        // check position value, to update task status depending on the column it is moved to
+        if ($column->name === 'Done') {
+            $task->task_status = 'Done';
+        } elseif ($column->name === 'In Progress') {
+            $task->task_status = 'Inprogress';
+        } elseif ($column->name === 'Todo') {
+            $task->task_status = 'Todo';
+        } elseif ($column->name === 'In Review') {
+            $task->task_status = 'Inreview';
+        } elseif ($column->name === 'Cancelled') {
+            $task->task_status = 'Cancelled';
+        } elseif ($column->name === 'On Hold') {
+            $task->task_status = 'Onhold';
+        }
         if ($position === null) {
             $lastPosition = $column->tasks()->max('position');
             $position = $lastPosition === null ? 0 : $lastPosition + 1;
@@ -130,6 +145,7 @@ class TaskController extends Controller
         $task->update([
             'board_column'=>$column->id,
             'position'=>$position,
+            'task_status'=>$task->task_status
         ]);
         ActivityLog::record('task.moved', $task, "{$task->task_title} moved to column {$column->name}");
 
@@ -139,7 +155,7 @@ class TaskController extends Controller
         ],200);
     }
 
-    // remove a task from the board entirely — members may only delete tasks they created
+    // remove a task from the board entirely, members may only delete tasks they created
     public function destroy(Task $task)
     {
         if (!$task->board->workspace->hasMember(auth()->id())) {

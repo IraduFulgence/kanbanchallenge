@@ -3,7 +3,6 @@
 namespace App\Services;
 
 use Illuminate\Support\Facades\Cache;
-use Illuminate\Support\Facades\Redis;
 
 class CacheService
 {
@@ -79,10 +78,7 @@ class CacheService
      */
     public function forgetByPrefix(string $prefix): void
     {
-        $keys = Redis::keys($prefix . '*');
-        if (!empty($keys)) {
-            Redis::del($keys);
-        }
+        $this->flush();
     }
 
     /**

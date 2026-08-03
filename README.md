@@ -7,8 +7,7 @@ The project is a monorepo with two independent applications:
 | App | Stack | Role |
 |---|---|---|
 | [`kanbanbackend/`](kanbanbackend) | Laravel 13, PHP 8.3+, JWT auth | REST API + persistence |
-| [`kanbanfrontend/`](kanbanfrontend) | Next.js 16 (App Router), React 19, TypeScript, Tailwind CSS 4 | Single-page dashboard UI |
-
+| [`kanbanfrontend/`](kanbanfrontend) | Next.js 16 (App Router), React 19, TypeScript, Tailwind CSS 4 
 They communicate purely over HTTP — the frontend calls the backend's `/api/*` routes with a bearer JWT. There is no server-side rendering that depends on the API; every dashboard route is a client component.
 
 ---
@@ -74,7 +73,7 @@ php artisan migrate
 php artisan serve               # http://127.0.0.1:8000
 ```
 
-The API is served under `http://127.0.0.1:8000/api`.
+The API is served under `https://kanban.bellatis.com/api`.
 
 > **First account**: public self-registration (`POST /api/auth/register`) always creates a `member`. To get an admin account for local testing, register normally, then promote it:
 > ```bash
@@ -91,7 +90,7 @@ cp .env.example .env.local       # set NEXT_PUBLIC_API_URL if it differs from th
 npm run dev                      # http://localhost:3000
 ```
 
-Open `http://localhost:3000` — you'll be redirected to `/auth/login`.
+Open `https://lkanban,bellatis.com` — you'll be redirected to `/auth/login`.
 
 ### Environment variables
 
@@ -108,7 +107,7 @@ Open `http://localhost:3000` — you'll be redirected to `/auth/login`.
 
 | Key | Purpose |
 |---|---|
-| `NEXT_PUBLIC_API_URL` | Base URL of the Laravel API, including the `/api` suffix (e.g. `http://127.0.0.1:8000/api`) |
+| `NEXT_PUBLIC_API_URL` | Base URL of the Laravel API, including the `/api` suffix (e.g. `https://kanbanapi.bellatis.com/api`) |
 
 ---
 
@@ -182,4 +181,11 @@ npm run dev      # dev server with hot reload
 npm run build    # production build
 npm run start    # serve the production build
 npm run lint     # ESLint
+```
+** For testing run**
+```
+https:kanbanapi.bellatis.com/api #for end points
+https:kanban.bellatis.com        #for frontend
+email: member@kanban.test
+password: Myhandle12@
 ```

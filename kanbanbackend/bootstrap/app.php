@@ -18,11 +18,6 @@ return Application::configure(basePath: dirname(__DIR__))
         //
         $middleware->alias([
             'cache.response' => CacheResponse::class,
-            'rate.limit' => \App\Http\Middleware\RedisRateLimiter::class,
-        ]);
-        // Add rate limiting to api group
-        $middleware->api(prepend: [
-            \App\Http\Middleware\RedisRateLimiter::class . ':60,60',
         ]);
     })
     ->withExceptions(function (Exceptions $exceptions): void {
