@@ -19,6 +19,7 @@ Route::post("/auth/login",[AuthController::class, 'loginUser']);
 // protected routes using JWT middleware guard
 Route::middleware('auth:api')->group(function(){
     Route::get('/user',[AuthController::class, 'getuserinfo']);
+    Route::patch('/profile',[AuthController::class, 'updateProfile']);
     Route::post('/logout',[AuthController::class,'logUserOut']);
 
     // admin/project_manager account management
@@ -50,6 +51,7 @@ Route::middleware('auth:api')->group(function(){
     Route::delete('/boards/{board}/columns/{column}',[ColumnController::class,'destroy']);
 
     // tasks living on a board column
+    Route::get('/my-tasks',[TaskController::class,'myTasks']);
     Route::post('/boards/{board}/columns/{column}/tasks',[TaskController::class,'store']);
     Route::patch('/tasks/{task}',[TaskController::class,'update']);
     Route::patch('/tasks/{task}/move',[TaskController::class,'move']);

@@ -74,7 +74,6 @@ export default function TeamPage() {
 
   useEffect(() => {
     Promise.resolve().then(load);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [page, roleFilter]);
 
   function handleSearchSubmit(e: React.FormEvent) {
@@ -102,7 +101,7 @@ export default function TeamPage() {
   }
 
   if (!currentUser || currentUser.role === "member") {
-    return <p className="text-sm text-red-600">You don&apos;t have permission to view this page.</p>;
+    return <p className="text-sm text-red-600">You don't have permission to view this page.</p>;
   }
 
   const canEdit = currentUser.role === "admin";
@@ -112,7 +111,7 @@ export default function TeamPage() {
     <div>
       <div className="mb-6 flex flex-wrap items-center justify-between gap-3">
         <div>
-          <h1 className="text-2xl font-semibold text-zinc-900 dark:text-white">Employees</h1>
+          <h1 className="text-2xl font-semibold text-zinc-900 dark:text-white">Users</h1>
           <p className="mt-1 text-sm text-zinc-500">
             {total} registered {total === 1 ? "account" : "accounts"}
           </p>

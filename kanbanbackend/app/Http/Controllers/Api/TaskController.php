@@ -12,6 +12,26 @@ use App\Models\ActivityLog;
 
 class TaskController extends Controller
 {
+    // every task assigned to the logged-in user, across every workspace/board
+    // they belong to — this is what "My Tasks" shows
+    public function myTasks(Request $request)
+    {
+        $query = Task::where('assigned_to', auth()->id())
+            ->with(['board.workspace', 'column']);
+
+        if ($request->filled('status')) {
+            $query->where('task_status', $request->get('status'));
+        }
+
+        // tasks with a due date first (soonest first), undated ones last
+        $query->orderByRaw('task_duedate IS NULL')->orderBy('task_duedate');
+
+        return response()->json([
+            'message'=>'tasks found',
+            'data'=>$query->paginate(20)
+        ],200);
+    }
+
     // any workspace member (admin, project_manager or member) can drop a task on a column
     public function store(Request $request, WorkingBoard $board, WorkingBoardColumn $column)
     {

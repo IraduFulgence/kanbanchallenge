@@ -13,6 +13,7 @@ const SECTION_LABELS: { prefix: string; label: string }[] = [
   { prefix: "/dashboard/departments", label: "Departments" },
   { prefix: "/dashboard/reports", label: "Reports" },
   { prefix: "/dashboard/settings", label: "Settings" },
+  { prefix: "/dashboard/profile", label: "My Profile" },
 ];
 
 function sectionLabel(pathname: string | null): string {

@@ -1,7 +1,8 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import { ChevronDownIcon, LogoutIcon } from "./icons";
+import Link from "next/link";
+import { ChevronDownIcon, LogoutIcon, GearIcon } from "./icons";
 import { useAuth } from "@/hooks/useAuth";
 import { Role } from "@/lib/api";
 const ROLE_LABEL: Record<Role, string> = {
@@ -50,10 +51,18 @@ export default function UserMenu() {
               {ROLE_LABEL[user.role] ?? user.role}
             </span>
           </div>
+          <Link
+            href="/dashboard/profile"
+            onClick={() => setOpen(false)}
+            className="flex w-full items-center gap-2 px-4 py-2.5 text-left text-sm font-medium text-zinc-700 hover:bg-zinc-100 dark:text-white dark:hover:bg-gray-800"
+          >
+            <GearIcon className="h-4 w-4" />
+            Profile & settings
+          </Link>
           <button
             type="button"
             onClick={() => logout()}
-            className="flex w-full items-center gap-2 px-4 py-2.5 text-left text-sm font-medium text-red-600 hover:bg-red-50"
+            className="flex w-full items-center gap-2 border-t border-zinc-100 px-4 py-2.5 text-left text-sm font-medium text-red-600 hover:bg-red-50 dark:border-gray-800"
           >
             <LogoutIcon className="h-4 w-4" />
             Sign out

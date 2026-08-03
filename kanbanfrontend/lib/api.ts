@@ -12,6 +12,7 @@ import type {
   WorkspaceAnalytics,
   PaginatedActivityLogs,
   PaginatedUsers,
+  PaginatedTasks,
   User as AppUser,
 } from "./types";
 
@@ -248,6 +249,19 @@ export function updateUserAccount(
   return api.patch<{ data: AppUser }>(`/users/${userId}`, user);
 }
 
+// self-service: the logged-in user edits their own name/email/phone, and
+// optionally changes their password (current_password must match)
+export function updateMyProfile(data: {
+  name?: string;
+  email?: string;
+  phone?: string;
+  current_password?: string;
+  password?: string;
+  password_confirmation?: string;
+}) {
+  return api.patch<{ data: AppUser }>("/profile", data);
+}
+
 export function getBoards(workspaceId: number) {
   return api.get<{ data: Board[] }>(`/working_space/${workspaceId}/boards`);
 }
@@ -293,6 +307,15 @@ export function updateTask(
   }>
 ) {
   return api.patch<{ data: Task }>(`/tasks/${taskId}`, task);
+}
+
+// every task assigned to the logged-in user, across every workspace/board
+export function getMyTasks(params?: { status?: TaskStatus; page?: number }) {
+  const query = new URLSearchParams();
+  if (params?.status) query.set("status", params.status);
+  if (params?.page) query.set("page", String(params.page));
+  const qs = query.toString();
+  return api.get<{ data: PaginatedTasks }>(`/my-tasks${qs ? `?${qs}` : ""}`);
 }
 
 export function moveTask(taskId: number, boardColumn: number, position?: number) {

@@ -74,6 +74,9 @@ export interface Task {
   labels?: Label[];
   comments?: Comment[];
   comments_count?: number;
+  // present on the "My Tasks" feed, which loads the task's board/workspace/column
+  board?: Board & { workspace?: Pick<Workspace, "id" | "workspace_name"> };
+  column?: Column;
   created_at: string;
   updated_at: string;
 }
@@ -114,6 +117,13 @@ export interface PaginatedActivityLogs {
 
 export interface PaginatedUsers {
   data: User[];
+  current_page: number;
+  last_page: number;
+  total: number;
+}
+
+export interface PaginatedTasks {
+  data: Task[];
   current_page: number;
   last_page: number;
   total: number;

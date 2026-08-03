@@ -17,22 +17,22 @@ import {
 type NavItem = { href: string; label: string; icon: typeof HomeIcon };
 
 const HOME: NavItem = { href: "/dashboard/home", label: "Home", icon: HomeIcon };
-const PROJECTS: NavItem = { href: "/dashboard/projects", label: "Projects", icon: FolderIcon };
+const PROJECTS: NavItem = { href: "/dashboard/projects", label: "Working space", icon: FolderIcon };
 const TASKS: NavItem = { href: "/dashboard/tasks", label: "My Tasks", icon: TasksIcon };
 const REPORTS: NavItem = { href: "/dashboard/reports", label: "Reports", icon: ChartBarIcon };
-const EMPLOYEES: NavItem = { href: "/dashboard/team", label: "Employees", icon: UsersIcon };
+const EMPLOYEES: NavItem = { href: "/dashboard/team", label: "Team", icon: UsersIcon };
 
 const ROLE_NAV: Record<Role, NavItem[]> = {
   admin: [
     HOME,
     PROJECTS,
     EMPLOYEES,
-    { href: "/dashboard/departments", label: "Departments", icon: BuildingIcon },
+    
     REPORTS,
-    { href: "/dashboard/settings", label: "Settings", icon: GearIcon },
+    { href: "/dashboard/profile", label: "Profile", icon: GearIcon },
   ],
-  project_manager: [HOME, PROJECTS, EMPLOYEES, TASKS, REPORTS],
-  member: [HOME, TASKS, PROJECTS],
+  project_manager: [HOME, PROJECTS, EMPLOYEES, TASKS,{ href: "/dashboard/profile", label: "Profile", icon: GearIcon },],
+  member: [HOME, TASKS, PROJECTS,{ href: "/dashboard/profile", label: "Profile", icon: GearIcon },],
 };
 
 export default function Sidebar({ onNavigate }: { onNavigate?: () => void }) {

@@ -14,6 +14,7 @@ interface AuthContextValue {
   login: (email: string, password: string) => Promise<void>;
   register: (data: { name: string; email: string; phone: string; password: string; role: Role }) => Promise<void>;
   logout: () => Promise<void>;
+  updateUser: (user: User) => void;
 }
 
 const AuthContext = createContext<AuthContextValue | null>(null);
@@ -66,8 +67,12 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     }
   }, [router]);
 
+  const updateUser = useCallback((updated: User) => {
+    setUser(updated);
+  }, []);
+
   return (
-    <AuthContext.Provider value={{ isAuthenticated:user !==null,user, loading, login, register, logout }}>
+    <AuthContext.Provider value={{ isAuthenticated:user !==null,user, loading, login, register, logout, updateUser }}>
       {children}
     </AuthContext.Provider>
   );
