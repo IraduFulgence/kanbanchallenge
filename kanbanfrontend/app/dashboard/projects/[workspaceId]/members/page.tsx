@@ -137,7 +137,7 @@ export default function WorkspaceMembersPage() {
           <button
             type="button"
             onClick={() => setShowAdd(true)}
-            className="flex items-center gap-2 rounded-lg bg-green-900 px-4 py-2 text-sm font-semibold text-white hover:bg-green-800"
+            className="flex items-center gap-2 rounded-lg bg-emerald-600 px-4 py-2 text-sm font-semibold text-white hover:bg-emerald-700"
           >
             <PlusIcon className="h-4 w-4" />
             Add member
@@ -160,7 +160,7 @@ export default function WorkspaceMembersPage() {
           </thead>
           <tbody className="divide-y divide-zinc-200 dark:divide-zinc-700">
             {workspace.owner && (
-              <tr>
+              <tr className="transition-colors hover:bg-zinc-50 dark:hover:bg-zinc-800/40">
                 <td className="px-4 py-3 font-medium text-zinc-900 dark:text-white">
                   <div className="flex items-center gap-2">
                     <Avatar name={workspace.owner.name} />
@@ -184,7 +184,7 @@ export default function WorkspaceMembersPage() {
             {members.map((member) => {
               const isSelf = member.user.id === user?.id;
               return (
-                <tr key={member.id}>
+                <tr key={member.id} className="transition-colors hover:bg-zinc-50 dark:hover:bg-zinc-800/40">
                   <td className="px-4 py-3 font-medium text-zinc-900 dark:text-white">
                     <div className="flex items-center gap-2">
                       <Avatar name={member.user.name} />

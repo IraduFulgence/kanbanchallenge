@@ -16,7 +16,7 @@ export default function GuestGuard({ children }: { children: React.ReactNode }) 
 
   if (loading) {
     return (
-      <div className="flex min-h-screen items-center justify-center text-sm text-green-500">
+      <div className="flex min-h-screen items-center justify-center text-sm text-emerald-500">
         Loading…
       </div>
     );

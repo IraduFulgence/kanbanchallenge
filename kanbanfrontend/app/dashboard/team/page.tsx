@@ -119,7 +119,7 @@ export default function TeamPage() {
         <button
           type="button"
           onClick={() => setShowCreate(true)}
-          className="flex items-center gap-2 rounded-lg bg-green-900 px-4 py-2 text-sm font-semibold text-white hover:bg-green-800"
+          className="flex items-center gap-2 rounded-lg bg-emerald-600 px-4 py-2 text-sm font-semibold text-white hover:bg-emerald-700"
         >
           <PlusIcon className="h-4 w-4" />
           Create user
@@ -185,7 +185,7 @@ export default function TeamPage() {
                 {users.map((u) => {
                   const isSelf = u.id === currentUser.id;
                   return (
-                    <tr key={u.id}>
+                    <tr key={u.id} className="transition-colors hover:bg-zinc-50 dark:hover:bg-zinc-800/40">
                       <td className="px-4 py-3 font-medium text-zinc-900 dark:text-white">
                         <div className="flex items-center gap-2">
                           <Avatar name={u.name} />

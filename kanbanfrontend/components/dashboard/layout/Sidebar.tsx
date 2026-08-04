@@ -5,7 +5,6 @@ import { usePathname } from "next/navigation";
 import { useAuth } from "@/hooks/useAuth";
 import type { Role } from "@/lib/api";
 import {
-  BuildingIcon,
   ChartBarIcon,
   FolderIcon,
   GearIcon,
@@ -42,9 +41,11 @@ export default function Sidebar({ onNavigate }: { onNavigate?: () => void }) {
 
   return (
     <div className="flex h-full flex-col bg-white dark:bg-gray-900 dark:text-white">
-      <div className="flex items-center gap-2 px-6 py-5">
-       
-        <span className="text-lg font-semibold text-zinc-900 dark:text-white">{user?.name}</span>
+      <div className="flex items-center gap-2.5 px-6 py-5">
+        <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-emerald-600 text-sm font-bold text-white">
+          K
+        </div>
+        <span className="truncate text-sm font-medium text-zinc-500 dark:text-zinc-400">{user?.name}</span>
       </div>
 
       <nav className="flex-1 space-y-1 px-3 pb-4">
@@ -55,10 +56,10 @@ export default function Sidebar({ onNavigate }: { onNavigate?: () => void }) {
               key={href}
               href={href}
               onClick={onNavigate}
-              className={`flex items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium  ${
+              className={`flex items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium transition-colors ${
                 active
-                  ? "bg-zinc-900 text-gray-900 dark:bg-gray-800 dark:text-white"
-                  : "text-zinc-600 hover:bg-zinc-100 hover:text-zinc-900 dark:hover:bg-gray-800 dark:text-white dark:hover:text-white"
+                  ? "bg-emerald-600 text-white shadow-sm"
+                  : "text-zinc-600 hover:bg-zinc-100 hover:text-zinc-900 dark:text-zinc-300 dark:hover:bg-gray-800 dark:hover:text-white"
               }`}
             >
               <Icon className="h-5 w-5 shrink-0" />

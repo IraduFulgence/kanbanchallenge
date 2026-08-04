@@ -72,7 +72,7 @@ export default function ReportsPage() {
               </thead>
               <tbody className="divide-y divide-zinc-100 dark:divide-zinc-800">
                 {logs.data.map((entry) => (
-                  <tr key={entry.id}>
+                  <tr key={entry.id} className="transition-colors hover:bg-zinc-50 dark:hover:bg-zinc-800/40">
                     <td className="whitespace-nowrap px-4 py-3 text-zinc-500">
                       {new Date(entry.created_at).toLocaleString()}
                     </td>

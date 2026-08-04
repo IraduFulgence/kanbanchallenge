@@ -24,7 +24,7 @@ export default function TaskCard({
       draggable
       onDragStart={onDragStart}
       onClick={onOpen}
-      className="cursor-grab space-y-2 rounded-lg border border-zinc-200 bg-white p-3 text-left shadow-sm hover:border-zinc-300 active:cursor-grabbing dark:border-zinc-700 dark:bg-gray-800 dark:hover:border-zinc-600"
+      className="cursor-grab space-y-2 rounded-lg border border-zinc-200 bg-white p-3 text-left shadow-sm transition-shadow hover:border-zinc-300 hover:shadow-md active:cursor-grabbing dark:border-zinc-700 dark:bg-gray-800 dark:hover:border-zinc-600"
     >
       <p className="text-sm font-medium text-zinc-900 dark:text-white">{task.task_title}</p>
 

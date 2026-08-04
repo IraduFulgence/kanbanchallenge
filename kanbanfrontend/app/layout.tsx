@@ -1,6 +1,9 @@
 import type { Metadata } from "next";
+import { Inter } from "next/font/google";
 import { AuthProvider } from "@/hooks/useAuth";
 import "./globals.css";
+
+const inter = Inter({ subsets: ["latin"], variable: "--font-geist-sans" });
 
 export const metadata: Metadata = {
   title: "Kanban|Project",
@@ -13,11 +16,8 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html
-      lang="en"
-      
-    >
-      <body className="min-h-full flex flex-col ">
+    <html lang="en" className={inter.variable}>
+      <body className="flex min-h-screen flex-col font-sans antialiased">
         <AuthProvider>{children}</AuthProvider>
       </body>
     </html>

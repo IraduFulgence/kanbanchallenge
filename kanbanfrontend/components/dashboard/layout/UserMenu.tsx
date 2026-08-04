@@ -33,12 +33,12 @@ export default function UserMenu() {
       <button
         type="button"
         onClick={() => setOpen((v) => !v)}
-        className="flex items-center gap-2 rounded-lg py-1.5 pl-1.5 pr-2 hover:bg-zinc-100"
+        className="flex items-center gap-2 rounded-lg py-1.5 pl-1.5 pr-2 hover:bg-zinc-100 dark:hover:bg-gray-800"
       >
-        <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-zinc-900 text-sm font-medium text-white dark:bg-gray-800 dark:text-white">
+        <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-zinc-900 text-sm font-medium text-white dark:bg-gray-800">
           {user.name.charAt(0).toUpperCase()}
         </div>
-        <span className="hidden text-sm font-medium text-zinc-700 sm:block">{user.name}</span>
+        <span className="hidden text-sm font-medium text-zinc-700 dark:text-zinc-200 sm:block">{user.name}</span>
         <ChevronDownIcon className={`h-4 w-4 text-zinc-400 transition-transform ${open ? "rotate-180" : ""}`} />
       </button>
 

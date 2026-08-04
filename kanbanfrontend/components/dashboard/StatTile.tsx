@@ -10,8 +10,8 @@ export default function StatTile({
   value: number | string;
 }) {
   return (
-    <div className="rounded-xl border border-zinc-200 bg-white p-5 dark:border-zinc-700 dark:bg-gray-900">
-      <div className="mb-3 flex h-10 w-10 items-center justify-center rounded-lg bg-zinc-900 text-white">
+    <div className="rounded-xl border border-zinc-200 bg-white p-5 transition-shadow hover:shadow-sm dark:border-zinc-700 dark:bg-gray-900">
+      <div className="mb-3 flex h-10 w-10 items-center justify-center rounded-lg bg-emerald-600 text-white">
         <Icon className="h-5 w-5" />
       </div>
       <p className="text-2xl font-semibold text-zinc-900 dark:text-white">{value}</p>

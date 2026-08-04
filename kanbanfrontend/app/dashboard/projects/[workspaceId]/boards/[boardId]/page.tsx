@@ -181,13 +181,13 @@ export default function BoardPage() {
 
   return (
     <div className="flex h-full flex-col">
-      <div className="mb-6 flex items-center justify-between">
-        <div>
-          <h1 className="text-2xl font-semibold text-zinc-900 dark:text-white">{board.board_name}</h1>
+      <div className="mb-6 flex flex-wrap items-center justify-between gap-3">
+        <div className="min-w-0">
+          <h1 className="truncate text-2xl font-semibold text-zinc-900 dark:text-white">{board.board_name}</h1>
           {board.board_details && <p className="mt-1 text-sm text-zinc-500">{board.board_details}</p>}
         </div>
         {canManage && (
-          <div className="flex gap-2">
+          <div className="flex flex-wrap gap-2">
             <button
               type="button"
               onClick={() => setShowAddColumn(true)}
@@ -211,7 +211,7 @@ export default function BoardPage() {
 
       {loadError && <p className="mb-4 text-sm text-red-600">{loadError}</p>}
 
-      <div className="flex flex-1 gap-4 overflow-x-auto pb-4">
+      <div className="flex flex-1 snap-x snap-mandatory gap-4 overflow-x-auto overscroll-x-contain pb-4">
         {board.columns?.map((column) => {
           const color = columnColor(column.position);
           const isDragOver = dragOverColumnId === column.id;
@@ -224,7 +224,7 @@ export default function BoardPage() {
               }}
               onDragLeave={() => setDragOverColumnId((id) => (id === column.id ? null : id))}
               onDrop={(e) => handleDrop(e, column)}
-              className={`flex w-72 shrink-0 flex-col rounded-xl border p-3 ${color.bg} ${
+              className={`flex w-[82vw] shrink-0 snap-start flex-col rounded-xl border p-3 sm:w-72 ${color.bg} ${
                 isDragOver ? "border-zinc-400 dark:border-zinc-500" : color.border
               }`}
             >
@@ -352,7 +352,7 @@ function AddColumnModal({
         <button
           type="submit"
           disabled={saving}
-          className="w-full rounded-lg bg-green-900 px-4 py-2 text-sm font-semibold text-white hover:bg-green-800 disabled:opacity-50"
+          className="w-full rounded-lg bg-emerald-600 px-4 py-2 text-sm font-semibold text-white hover:bg-emerald-700 disabled:opacity-50"
         >
           {saving ? "Creating…" : "Create column"}
         </button>

@@ -12,7 +12,7 @@ export default function LoginComponent(){
     const [password, setPassword] = useState("");
     const [error, setError] = useState("");
     const [loading, setLoading] = useState(false);
-  
+
     async function handleSubmit(e: React.FormEvent) {
       e.preventDefault();
       setError("");
@@ -27,16 +27,17 @@ export default function LoginComponent(){
         setLoading(false);
       }
     }
-  
+
     return (
-      
-        <div className="w-full max-w-md rounded-lg bg-white p-8 shadow dark:bg-gray-800 w-h-full">
-          <form onSubmit={handleSubmit} className="space-y-4 ">
+      <div>
+        <h1 className="mb-6 text-center text-xl font-semibold text-zinc-900 dark:text-white">
+          Sign in to your account
+        </h1>
+        <form onSubmit={handleSubmit} className="space-y-4">
           <AuthInput
             label="Email"
             type="email"
             autoComplete="email"
-            
             value={email}
             onChange={(e) => setEmail(e.target.value)}
           />
@@ -44,23 +45,20 @@ export default function LoginComponent(){
             label="Password"
             type="password"
             autoComplete="current-password"
-            
             value={password}
             onChange={(e) => setPassword(e.target.value)}
           />
           {error && <p className="text-sm text-red-600">{error}</p>}
-          <button type="submit" disabled={loading} className="w-full rounded-lg bg-green-900 px-4 py-2 text-sm font-semibold text-white hover:bg-green-900 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2 disabled:opacity-50">
+          <button type="submit" disabled={loading} className="w-full rounded-lg bg-emerald-600 px-4 py-2 text-sm font-semibold text-white hover:bg-emerald-700 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:ring-offset-2 disabled:opacity-50">
             {loading ? "Signing in…" : "Sign in"}
           </button>
-          {/* <p className="text-center text-sm text-zinc-600 dark:text-zinc-400">
+          <p className="text-center text-sm text-zinc-600 dark:text-zinc-400">
             Need an account?{" "}
-            <Link href="/auth/register" className="font-medium text-green-900 dark:text-green-500">
+            <Link href="/auth/register" className="font-medium text-emerald-700 dark:text-emerald-400">
               Create one
             </Link>
-          </p> */}
+          </p>
         </form>
-        </div>
-
-      
+      </div>
     );
   }

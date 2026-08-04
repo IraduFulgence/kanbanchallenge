@@ -107,7 +107,7 @@ export default function WorkspaceDetailPage() {
             <button
               type="button"
               onClick={() => setShowCreateBoard(true)}
-              className="flex items-center gap-2 rounded-lg bg-green-900 px-4 py-2 text-sm font-semibold text-white hover:bg-green-800"
+              className="flex items-center gap-2 rounded-lg bg-emerald-600 px-4 py-2 text-sm font-semibold text-white hover:bg-emerald-700"
             >
               <PlusIcon className="h-4 w-4" />
               New board
@@ -149,9 +149,9 @@ export default function WorkspaceDetailPage() {
             <Link
               key={board.id}
               href={`/dashboard/projects/${workspace.id}/boards/${board.id}`}
-              className="rounded-xl border border-zinc-200 bg-white p-5 hover:border-zinc-300 hover:shadow-sm dark:border-zinc-700 dark:bg-gray-900 dark:hover:border-zinc-600"
+              className="rounded-xl border border-zinc-200 bg-white p-5 transition-all hover:border-zinc-300 hover:shadow-sm dark:border-zinc-700 dark:bg-gray-900 dark:hover:border-zinc-600"
             >
-              <div className="mb-3 flex h-10 w-10 items-center justify-center rounded-lg bg-zinc-900 text-white">
+              <div className="mb-3 flex h-10 w-10 items-center justify-center rounded-lg bg-emerald-600 text-white">
                 <FolderIcon className="h-5 w-5" />
               </div>
               <h3 className="font-medium text-zinc-900 dark:text-white">{board.board_name}</h3>
@@ -327,7 +327,7 @@ function CreateBoardModal({
           <button
             type="button"
             onClick={() => setColumns((prev) => [...prev, ""])}
-            className="flex items-center gap-1 text-sm font-medium text-green-900 hover:underline dark:text-green-500"
+            className="flex items-center gap-1 text-sm font-medium text-emerald-700 hover:underline dark:text-emerald-400"
           >
             <PlusIcon className="h-4 w-4" />
             Add column
@@ -338,7 +338,7 @@ function CreateBoardModal({
         <button
           type="submit"
           disabled={saving}
-          className="w-full rounded-lg bg-green-900 px-4 py-2 text-sm font-semibold text-white hover:bg-green-800 disabled:opacity-50"
+          className="w-full rounded-lg bg-emerald-600 px-4 py-2 text-sm font-semibold text-white hover:bg-emerald-700 disabled:opacity-50"
         >
           {saving ? "Creating…" : "Create board"}
         </button>

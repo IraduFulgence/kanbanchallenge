@@ -77,7 +77,7 @@ export default function AddToWorkspaceModal({
           <button
             type="submit"
             disabled={saving}
-            className="w-full rounded-lg bg-green-900 px-4 py-2 text-sm font-semibold text-white hover:bg-green-800 disabled:opacity-50"
+            className="w-full rounded-lg bg-emerald-600 px-4 py-2 text-sm font-semibold text-white hover:bg-emerald-700 disabled:opacity-50"
           >
             {saving ? "Adding…" : "Add to workspace"}
           </button>

@@ -120,7 +120,7 @@ export default function AddMemberModal({
             <button
               type="submit"
               disabled={saving}
-              className="flex-1 rounded-lg bg-green-900 px-4 py-2 text-sm font-semibold text-white hover:bg-green-800 disabled:opacity-50"
+              className="flex-1 rounded-lg bg-emerald-600 px-4 py-2 text-sm font-semibold text-white hover:bg-emerald-700 disabled:opacity-50"
             >
               {saving ? "Creating…" : "Create & add"}
             </button>
@@ -149,7 +149,7 @@ export default function AddMemberModal({
         <button
           type="submit"
           disabled={saving}
-          className="w-full rounded-lg bg-green-900 px-4 py-2 text-sm font-semibold text-white hover:bg-green-800 disabled:opacity-50"
+          className="w-full rounded-lg bg-emerald-600 px-4 py-2 text-sm font-semibold text-white hover:bg-emerald-700 disabled:opacity-50"
         >
           {saving ? "Adding…" : "Add to workspace"}
         </button>

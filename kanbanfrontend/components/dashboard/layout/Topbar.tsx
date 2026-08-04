@@ -31,14 +31,14 @@ export default function Topbar({ onOpenMenu }: { onOpenMenu: () => void }) {
         type="button"
         aria-label="Open menu"
         onClick={onOpenMenu}
-        className="rounded-lg p-2 text-zinc-600 hover:bg-zinc-100 md:hidden"
+        className="rounded-lg p-2 text-zinc-600 hover:bg-zinc-100 dark:text-zinc-300 dark:hover:bg-gray-800 md:hidden"
       >
         <MenuIcon className="h-6 w-6" />
       </button>
 
-      <div className="hidden shrink-0 md:block dark:bg-gray-900">
+      <div className="min-w-0 shrink-0">
         <p className="text-xs font-medium uppercase tracking-wide text-zinc-400">Dashboard</p>
-        <p className="text-sm font-semibold text-zinc-900">{sectionLabel(pathname)}</p>
+        <p className="truncate text-sm font-semibold text-zinc-900 dark:text-white">{sectionLabel(pathname)}</p>
       </div>
 
       <div className="flex-1" />
