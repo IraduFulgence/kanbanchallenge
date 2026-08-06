@@ -9,7 +9,7 @@ use App\Models\WorkSpace;
 use App\Models\WorkspaceMembers;
 use App\Models\User;
 use App\Models\ActivityLog;
-
+use Illuminate\Support\Facades\Cache;
 class WorkspaceController extends Controller
 {
     //create workspace that belongs to user
@@ -36,18 +36,26 @@ class WorkspaceController extends Controller
     }
     // getting all the working spaces the current user owns or was invited into
     public function myspace(){
+
         // check if the user is logged in
 
         if (!auth()->user()) {
             # code...
             return response()->json(['message'=>"You must login"],401);
         }
-        $myworkingspace = WorkSpace::where('owner_id',auth()->user()->id)
-            ->orWhereHas('members', function($query){
-                $query->where('user_id', auth()->id());
-            })
-            ->withCount('boards')
-            ->get();
+        // check if the working space is cached
+        $prefix = config('cache.prefix');
+        $key = sprintf('%s:myworkingspace_%s', $prefix, auth()->id());
+        $myworkingspace = Cache::store->remember($key, 60, function () {
+            return WorkSpace::where('owner_id',auth()->user()->id)
+                ->orWhereHas('members', function($query){
+                    $query->where('user_id', auth()->id());
+                })
+                ->withCount('boards')
+                ->get();
+        });
+        
+        
 
         return response()->json([
             'message'=>$myworkingspace->isNotEmpty() ? 'Working space found' : 'No working space found',
