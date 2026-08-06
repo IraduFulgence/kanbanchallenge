@@ -76,8 +76,8 @@ export default function RegisterComponent(){
               className="h-11 w-full rounded-lg border border-zinc-300 bg-white px-3 text-sm outline-none ring-zinc-950/10 focus:ring-2 dark:border-zinc-700 dark:bg-gray-900 dark:text-zinc-50"
             >
               <option value="member">Team Member</option>
-              <option value="project_manager">Project Manager</option>
-              <option value="admin">Admin</option>
+              {/* <option value="project_manager">Project Manager</option>
+              <option value="admin">Admin</option> */}
             </select>
           </div>
           {error && <p className="text-sm text-red-600">{error}</p>}

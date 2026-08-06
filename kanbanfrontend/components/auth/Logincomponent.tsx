@@ -52,12 +52,13 @@ export default function LoginComponent(){
           <button type="submit" disabled={loading} className="w-full rounded-lg bg-emerald-600 px-4 py-2 text-sm font-semibold text-white hover:bg-emerald-700 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:ring-offset-2 disabled:opacity-50">
             {loading ? "Signing in…" : "Sign in"}
           </button>
-          <p className="text-center text-sm text-zinc-600 dark:text-zinc-400">
+          {/* hide register route for security  */}
+          {/* <p className="text-center text-sm text-zinc-600 dark:text-zinc-400">
             Need an account?{" "}
             <Link href="/auth/register" className="font-medium text-emerald-700 dark:text-emerald-400">
               Create one
             </Link>
-          </p>
+          </p> */}
         </form>
       </div>
     );

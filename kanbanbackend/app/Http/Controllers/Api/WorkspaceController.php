@@ -44,16 +44,16 @@ class WorkspaceController extends Controller
             return response()->json(['message'=>"You must login"],401);
         }
         // check if the working space is cached
-        $prefix = config('cache.prefix');
-        $key = sprintf('%s:myworkingspace_%s', $prefix, auth()->id());
-        $myworkingspace = Cache::store->remember($key, 60, function () {
+        // $prefix = config('cache.prefix');
+        // $key = sprintf('%s:myworkingspace_%s', $prefix, auth()->id());
+        // $myworkingspace = Cache::store('redis')->remember($key, 60, function () {
             return WorkSpace::where('owner_id',auth()->user()->id)
                 ->orWhereHas('members', function($query){
                     $query->where('user_id', auth()->id());
                 })
                 ->withCount('boards')
                 ->get();
-        });
+        // });
         
         
 
